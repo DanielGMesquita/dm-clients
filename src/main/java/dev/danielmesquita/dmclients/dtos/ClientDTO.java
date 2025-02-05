@@ -4,6 +4,7 @@ import dev.danielmesquita.dmclients.entities.Client;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ public class ClientDTO {
   private Long id;
 
   @NotBlank(message = "Name is required")
+  @Size(min = 3, message = "Name must have at least 3 characters")
   private String name;
 
   @Pattern(regexp = "^[0-9]{11}$", message = "CPF must be 11 digits, without any special character")

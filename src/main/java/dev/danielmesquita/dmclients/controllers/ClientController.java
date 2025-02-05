@@ -23,7 +23,7 @@ public class ClientController {
     return ResponseEntity.ok(clientDTOPage);
   }
 
-  @GetMapping("/id")
+  @GetMapping("/{id}")
   private ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
     ClientDTO clientDTO = service.findById(id);
     return ResponseEntity.ok(clientDTO);

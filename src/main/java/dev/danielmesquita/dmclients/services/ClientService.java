@@ -3,9 +3,11 @@ package dev.danielmesquita.dmclients.services;
 import dev.danielmesquita.dmclients.dtos.ClientDTO;
 import dev.danielmesquita.dmclients.entities.Client;
 import dev.danielmesquita.dmclients.repositories.ClientRepository;
+import dev.danielmesquita.dmclients.services.exceptions.DatabaseException;
 import dev.danielmesquita.dmclients.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,12 +35,16 @@ public class ClientService {
 
   @Transactional
   public ClientDTO insertClient(ClientDTO clientDTO) {
-    Client entity = new Client();
-    dtoToEntity(clientDTO, entity);
+    try {
+      Client entity = new Client();
+      dtoToEntity(clientDTO, entity);
 
-    entity = repository.save(entity);
+      entity = repository.save(entity);
 
-    return new ClientDTO(entity);
+      return new ClientDTO(entity);
+    } catch (DataIntegrityViolationException e) {
+      throw new DatabaseException("Value already exists in database and must be unique");
+    }
   }
 
   @Transactional
